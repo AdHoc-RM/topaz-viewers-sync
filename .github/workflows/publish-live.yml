@@ -1,0 +1,52 @@
+# SPEC 8章。live.json を作り、GitHub Pagesに公開する
+name: Publish live.json
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# 公開が重なると古い live.json で上書きされうるため、1つずつ順に公開する
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      # 実行時の依存はないため npm install は不要
+      - name: Generate live.json
+        working-directory: sync
+        run: npm run generate -- ../_site/live.json
+        env:
+          TOPAZ_STREAM_KEY: ${{ vars.TOPAZ_STREAM_KEY }}
+          TOPAZ_SERVER_DOMAIN: ${{ vars.TOPAZ_SERVER_DOMAIN }}
+          EXPORT_URL: ${{ vars.EXPORT_URL }}
+          EXPORT_TOKEN: ${{ secrets.EXPORT_TOKEN }}
+          PUBLISHED_URL: https://adhoc-rm.github.io/topaz-viewers-sync/live.json
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
