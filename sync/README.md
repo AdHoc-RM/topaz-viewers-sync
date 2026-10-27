@@ -23,6 +23,20 @@ TOPAZ_STREAM_KEY=... EXPORT_URL=... EXPORT_TOKEN=... PUBLISHED_URL=... npm run g
 | `EXPORT_TOKEN` | 書き出し用の合言葉。Workerと同じ値 |
 | `PUBLISHED_URL` | 公開中の `live.json` のURL。取得に失敗した値の引き継ぎ元 |
 
+## 定期実行
+
+`.github/workflows/publish-live.yml` が5分ごと（と手動実行）に `live.json` を作り、GitHub Pagesに公開します。設定値は次の場所に置きます。
+
+| 名前 | 置き場所 |
+|---|---|
+| `TOPAZ_STREAM_KEY` | リポジトリの変数（Settings → Secrets and variables → Actions → Variables） |
+| `TOPAZ_SERVER_DOMAIN` | リポジトリの変数。通常のサーバーなら登録しない |
+| `EXPORT_URL` | リポジトリの変数 |
+| `EXPORT_TOKEN` | リポジトリのシークレット |
+| `PUBLISHED_URL` | ワークフローに直接記載 |
+
+生成が失敗したときは公開しないため、前回の `live.json` がそのまま残ります。
+
 ## 失敗したとき
 
 - TopazChatから数字が返らなければ、公開中の `live.json` の `live` を引き継ぎ、`live_ok` を `false` にする
