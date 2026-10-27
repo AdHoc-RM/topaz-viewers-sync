@@ -1,0 +1,27 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "topaz-viewers-sync",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-19",
+  "observability": {
+    "enabled": true
+  },
+  // database_id は Cloudflare へのデプロイ時に設定する（ローカルでは不要）
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "topaz-viewers-sync",
+      "migrations_dir": "migrations"
+    }
+  ],
+  // SPEC 7.4 の設定値。コードを変えずにここ（または wrangler dev --var）で差し替える
+  "vars": {
+    "MAX_NAME_LENGTH": "32",
+    "RATE_LIMIT_PER_HOUR": "10"
+  },
+  // NGワードの一覧（JSON の文字列配列）と書き出し用の合言葉。リポジトリが公開なのでシークレットで渡す。
+  // ローカルは .dev.vars、本番は wrangler secret put で設定する
+  "secrets": {
+    "required": ["NG_WORDS", "EXPORT_TOKEN"]
+  }
+}
