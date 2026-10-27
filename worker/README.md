@@ -29,6 +29,17 @@ NGワード・合言葉・鍵は、リポジトリが公開のためシークレ
 
 `migrations/` に置き、`npm run db:migrate:local`（ローカル）または `npm run db:migrate:remote`（本番）で適用します。
 
+## デプロイ
+
+共有の Cloudflare アカウント（`wrangler.jsonc` の `account_id`）にデプロイします。受け取り口は `https://topaz-viewers-sync.dawn-water-d8cd.workers.dev` です。
+
+```sh
+npm run db:migrate:remote   # マイグレーションを追加したとき
+npm run deploy
+```
+
+シークレットはデプロイで消えないため、値を変えるときだけ `wrangler secret put` で設定します。
+
 ## 検証
 
 ```sh
