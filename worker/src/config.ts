@@ -3,6 +3,7 @@ export type Config = {
   rateLimitPerHour: number;
   ngWords: string[];
   exportToken: string;
+  ipHashKey: string;
 };
 
 // 設定の誤りは登録を誤判定させるため、既定値で補わずに例外にする
@@ -12,6 +13,7 @@ export function loadConfig(env: Env): Config {
     rateLimitPerHour: parsePositiveInteger("RATE_LIMIT_PER_HOUR", env.RATE_LIMIT_PER_HOUR),
     ngWords: parseStringArray("NG_WORDS", env.NG_WORDS),
     exportToken: parseNonEmptyString("EXPORT_TOKEN", env.EXPORT_TOKEN),
+    ipHashKey: parseNonEmptyString("IP_HASH_KEY", env.IP_HASH_KEY),
   };
 }
 
@@ -29,8 +31,9 @@ function parseStringArray(key: string, value: string | undefined): string[] {
   } catch {
     throw new Error(`${key} must be a JSON array of strings`);
   }
-  if (!Array.isArray(parsed) || !parsed.every((item) => typeof item === "string")) {
-    throw new Error(`${key} must be a JSON array of strings`);
+  // 空文字は部分一致で必ず当たり、すべての名前を弾いてしまう
+  if (!Array.isArray(parsed) || !parsed.every((item) => typeof item === "string" && item !== "")) {
+    throw new Error(`${key} must be a JSON array of non-empty strings`);
   }
   return parsed;
 }

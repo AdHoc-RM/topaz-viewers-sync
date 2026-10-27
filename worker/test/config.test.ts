@@ -13,6 +13,7 @@ describe("loadConfig", () => {
       rateLimitPerHour: 10,
       ngWords: [],
       exportToken: "test-export-token",
+      ipHashKey: "test-ip-hash-key",
     });
   });
 
@@ -31,11 +32,11 @@ describe("loadConfig", () => {
     expect(() => loadConfig(envWith({ RATE_LIMIT_PER_HOUR: value }))).toThrow("RATE_LIMIT_PER_HOUR");
   });
 
-  it.each(["", "foo", '"foo"', "{}", "[1]", '["foo", null]'])("rejects NG_WORDS=%j", (value) => {
+  it.each(["", "foo", '"foo"', "{}", "[1]", '["foo", null]', '["foo", ""]'])("rejects NG_WORDS=%j", (value) => {
     expect(() => loadConfig(envWith({ NG_WORDS: value }))).toThrow("NG_WORDS");
   });
 
-  it("rejects an empty EXPORT_TOKEN", () => {
-    expect(() => loadConfig(envWith({ EXPORT_TOKEN: "" }))).toThrow("EXPORT_TOKEN");
+  it.each(["EXPORT_TOKEN", "IP_HASH_KEY"] as const)("rejects an empty %s", (key) => {
+    expect(() => loadConfig(envWith({ [key]: "" }))).toThrow(key);
   });
 });

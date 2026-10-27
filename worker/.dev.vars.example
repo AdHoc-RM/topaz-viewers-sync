@@ -1,2 +1,3 @@
 NG_WORDS='[]'
 EXPORT_TOKEN=local-export-token
+IP_HASH_KEY=local-ip-hash-key

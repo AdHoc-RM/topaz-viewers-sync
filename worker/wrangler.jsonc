@@ -19,9 +19,9 @@
     "MAX_NAME_LENGTH": "32",
     "RATE_LIMIT_PER_HOUR": "10"
   },
-  // NGワードの一覧（JSON の文字列配列）と書き出し用の合言葉。リポジトリが公開なのでシークレットで渡す。
+  // NGワードの一覧（JSON の文字列配列）、書き出し用の合言葉、接続元を変換する鍵。リポジトリが公開なのでシークレットで渡す。
   // ローカルは .dev.vars、本番は wrangler secret put で設定する
   "secrets": {
-    "required": ["NG_WORDS", "EXPORT_TOKEN"]
+    "required": ["NG_WORDS", "EXPORT_TOKEN", "IP_HASH_KEY"]
   }
 }

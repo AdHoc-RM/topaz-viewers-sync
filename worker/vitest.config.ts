@@ -13,6 +13,7 @@ export default defineConfig(async () => {
           bindings: {
             NG_WORDS: "[]",
             EXPORT_TOKEN: "test-export-token",
+            IP_HASH_KEY: "test-ip-hash-key",
             TEST_MIGRATIONS: migrations,
           },
         },
