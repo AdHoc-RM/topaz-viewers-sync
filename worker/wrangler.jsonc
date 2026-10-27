@@ -1,16 +1,18 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "topaz-viewers-sync",
+  // 共有の Cloudflare アカウント。ログイン中のユーザーが複数のアカウントに入れても、ここにデプロイされる
+  "account_id": "4cb63c07301191454485637a2e64c531",
   "main": "src/index.ts",
   "compatibility_date": "2026-10-19",
   "observability": {
     "enabled": true
   },
-  // database_id は Cloudflare へのデプロイ時に設定する（ローカルでは不要）
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "topaz-viewers-sync",
+      "database_id": "ef3f7108-2760-4c5d-9eff-908d2e20085d",
       "migrations_dir": "migrations"
     }
   ],
