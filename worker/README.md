@@ -19,8 +19,9 @@ npm run dev
 | `RATE_LIMIT_PER_HOUR` | 接続元ごとの1時間あたりの登録回数の上限 | `wrangler.jsonc` の `vars` |
 | `NG_WORDS` | NGワードの一覧（JSONの文字列配列。例: `["foo","bar"]`） | ローカルは `.dev.vars`、本番は `wrangler secret put NG_WORDS` |
 | `EXPORT_TOKEN` | 書き出し用の合言葉 | ローカルは `.dev.vars`、本番は `wrangler secret put EXPORT_TOKEN` |
+| `IP_HASH_KEY` | 回数制限のために接続元のIPを変換する鍵（推測されにくい長い文字列） | ローカルは `.dev.vars`、本番は `wrangler secret put IP_HASH_KEY` |
 
-NGワードと合言葉は、リポジトリが公開のためシークレットで渡します。いずれもコードを変えずに値を差し替えられます。ローカルでは `npm run dev -- --var MAX_NAME_LENGTH:20` のように一時的に上書きすることもできます。値が不正な場合は既定値で補わず、エラーになります。
+NGワード・合言葉・鍵は、リポジトリが公開のためシークレットで渡します。NGワードは全角・半角と大文字・小文字の違いをそろえたうえで、名前に含まれていれば弾きます。いずれもコードを変えずに値を差し替えられます。ローカルでは `npm run dev -- --var MAX_NAME_LENGTH:20` のように一時的に上書きすることもできます。値が不正な場合は既定値で補わず、エラーになります。
 
 `wrangler.jsonc` を変えたら `npm run cf-typegen` で型（`worker-configuration.d.ts`）を作り直してください。
 
